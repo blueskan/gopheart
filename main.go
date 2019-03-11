@@ -1,6 +1,8 @@
 package main
 
 import (
+	"strconv"
+
 	"github.com/blueskan/gopheart/config"
 	"github.com/blueskan/gopheart/http"
 	"github.com/blueskan/gopheart/provider"
@@ -21,6 +23,7 @@ func main() {
 	scheduler := provider.NewScheduler(providers)
 	scheduler.Schedule()
 
-	httpServer := http.NewHttpServer(scheduler)
+	failureStatusCode, _ := strconv.Atoi(config.Global.WebUI.FailureStatusCode)
+	httpServer := http.NewHttpServer(scheduler, failureStatusCode)
 	httpServer.Listen(config.Global.WebUI.Port)
 }

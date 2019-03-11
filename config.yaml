@@ -16,7 +16,7 @@ global:
       smtp_password: test
       message: "Service `${service_name}` has been down since `${duration +m}` minutes."
   retry_policy:
-    timeout: 15s
+    timeout: 3s
     down_threshold: 3
     up_threshold: 3
   check_interval: 15s
@@ -28,7 +28,7 @@ health_checks:
     source: https://google.com
     check_interval: 3s
     retry_policy:
-      timeout: 15s
+      timeout: 3s
       down_threshold: 3
       up_threshold: 3
     notifiers:
@@ -38,7 +38,7 @@ health_checks:
     type: redis
     source: redis://172.17.0.2:6379
     retry_policy:
-      timeout: 15s
+      timeout: 3s
       down_threshold: 3
       up_threshold: 3
   mongodb:
@@ -52,6 +52,6 @@ health_checks:
     type: memcache
     source: 172.17.0.4:11211
     retry_policy:
-      timeout: 15s
+      timeout: 3s
       down_threshold: 3
       up_threshold: 3
