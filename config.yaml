@@ -41,3 +41,10 @@ health_checks:
       timeout: 15s
       down_threshold: 3
       up_threshold: 3
+  mongodb:
+    type: mongodb
+    source: mongodb://172.17.0.3:27017
+    retry_policy:
+      timeout: 15s
+      down_threshold: 3
+      up_threshold: 3
