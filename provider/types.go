@@ -25,6 +25,12 @@ const (
 	Healthy   StateCode = "Healthy"
 )
 
+type AuditLog struct {
+	Timestamp     time.Time `json:"timestamp"`
+	PreviousState StateCode `json:"previous_state"`
+	NewState      StateCode `json:"new_state"`
+}
+
 type Statistics struct {
 	RunningInterval     time.Duration `json:"running_interval"`
 	LastRunAt           time.Time     `json:"last_run_at"`
@@ -32,4 +38,5 @@ type Statistics struct {
 	CurrentFailureCount int           `json:"current_failure_count"`
 	CurrentSuccessCount int           `json:"current_success_count"`
 	State               StateCode     `json:"state"`
+	AuditLogs           []AuditLog    `json:"audit_logs"`
 }

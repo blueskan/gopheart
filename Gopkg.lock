@@ -2,6 +2,12 @@
 
 
 [[projects]]
+  name = "github.com/Kelindar/binary"
+  packages = ["."]
+  revision = "5b5efcb095fa2fa673793e2e00d606eee881f65e"
+  version = "v1.0.4"
+
+[[projects]]
   branch = "master"
   name = "github.com/bradfitz/gomemcache"
   packages = ["memcache"]
@@ -20,10 +26,22 @@
   version = "v1.8.0"
 
 [[projects]]
+  name = "github.com/golang/protobuf"
+  packages = ["proto"]
+  revision = "c823c79ea1570fb5ff454033735a8e68575d1d0f"
+  version = "v1.3.0"
+
+[[projects]]
   name = "github.com/golang/snappy"
   packages = ["."]
   revision = "2a8bb927dd31d8daada140a5d09578521ce5c36a"
   version = "v0.0.1"
+
+[[projects]]
+  name = "github.com/vmihailenco/msgpack"
+  packages = [".","codes"]
+  revision = "b962d79429a3c5135cca9ed528943f1551ec04df"
+  version = "v4.0.2"
 
 [[projects]]
   branch = "master"
@@ -51,6 +69,12 @@
 
 [[projects]]
   branch = "master"
+  name = "golang.org/x/net"
+  packages = ["context"]
+  revision = "d8887717615a059821345a5c23649351b52a1c0b"
+
+[[projects]]
+  branch = "master"
   name = "golang.org/x/sync"
   packages = ["semaphore"]
   revision = "e225da77a7e68af35c70ccbf71af2b83e6acac3c"
@@ -62,6 +86,18 @@
   version = "v0.3.0"
 
 [[projects]]
+  name = "google.golang.org/appengine"
+  packages = [".","datastore","internal","internal/app_identity","internal/base","internal/datastore","internal/log","internal/modules","internal/remote_api"]
+  revision = "e9657d882bb81064595ca3b56cbe2546bbabf7b1"
+  version = "v1.4.0"
+
+[[projects]]
+  name = "gopkg.in/restruct.v1"
+  packages = ["."]
+  revision = "80ede2e57cc280052ab88753387703aa62475571"
+  version = "v1.0"
+
+[[projects]]
   name = "gopkg.in/yaml.v2"
   packages = ["."]
   revision = "51d6538a90f86fe93ac480b35f37b2be17fef232"
@@ -70,6 +106,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "f9247845682f64ba7872f824351123f814d0c2b5003d8eb47155714c1d0e0014"
+  inputs-digest = "999e3ad697d0513e2aec14adc2b27ea13c9e75467502c4e0b1e574ff7ff612ee"
   solver-name = "gps-cdcl"
   solver-version = 1

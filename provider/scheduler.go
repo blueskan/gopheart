@@ -2,26 +2,38 @@ package provider
 
 import (
 	"encoding/json"
+	"io/ioutil"
 	"log"
 	"sync"
 	"time"
+
+	"github.com/blueskan/gopheart/config"
+	"github.com/vmihailenco/msgpack"
 )
 
 type scheduler struct {
-	providers  []Provider
-	statistics map[string]*Statistics
+	providers   []Provider
+	statistics  map[string]*Statistics
+	persistence bool
 }
 
-func NewScheduler(providers []Provider) Scheduler {
+func NewScheduler(providers []Provider, statistics map[string]*Statistics, persistOnDisk bool) Scheduler {
 	scheduler := &scheduler{
-		providers: providers,
+		providers:   providers,
+		persistence: persistOnDisk,
 	}
+
+	// if config change we need doing some jobs here
+	if statistics != nil {
+		scheduler.statistics = statistics
+
+		return scheduler
+	}
+
 	scheduler.statistics = make(map[string]*Statistics)
 
 	for _, provider := range providers {
 		name := provider.GetName()
-
-		// TODO: Support persistence for statistics
 
 		if _, exists := scheduler.statistics[name]; !exists {
 			scheduler.statistics[name] = &Statistics{
@@ -30,6 +42,7 @@ func NewScheduler(providers []Provider) Scheduler {
 				RunningInterval:     provider.GetInterval(),
 				NextRunAt:           time.Now().Add(provider.GetInterval()),
 				State:               Healthy,
+				AuditLogs:           make([]AuditLog, 0),
 			}
 		}
 	}
@@ -91,16 +104,19 @@ func (s *scheduler) Schedule() {
 					statistics.LastRunAt = time.Now()
 					statistics.NextRunAt = time.Now().Add(statistics.RunningInterval)
 
+					previousState := statistics.State
+
+					// Please refactor this area: extract to function etc..
 					if isHealthy {
 						statistics.CurrentSuccessCount++
 
-						if statistics.CurrentSuccessCount > 3 {
+						if statistics.CurrentSuccessCount >= provider.GetUpThreshold() {
 							statistics.CurrentFailureCount = 0
 							statistics.State = Healthy
 						} else {
 							statistics.State = Sick
 						}
-					} else if statistics.CurrentFailureCount <= 3 {
+					} else if statistics.CurrentFailureCount <= provider.GetDownThreshold() {
 						statistics.CurrentFailureCount++
 
 						statistics.State = Sick
@@ -108,6 +124,16 @@ func (s *scheduler) Schedule() {
 						statistics.CurrentFailureCount++
 
 						statistics.State = UnHealthy
+					}
+
+					if previousState != statistics.State {
+						statistics.AuditLogs = append([]AuditLog{
+							AuditLog{
+								Timestamp:     time.Now(),
+								PreviousState: previousState,
+								NewState:      statistics.State,
+							},
+						}, statistics.AuditLogs...)
 					}
 
 					json, _ := json.Marshal(statistics)
@@ -118,6 +144,17 @@ func (s *scheduler) Schedule() {
 			}
 
 			waitGroup.Wait()
+
+			if s.persistence {
+				log.Printf("[INFO] Starting persist on a disk")
+
+				statistics := s.GetStatistics()
+				data, _ := msgpack.Marshal(&statistics)
+
+				ioutil.WriteFile(config.DbPath, data, 0644)
+
+				log.Printf("[INFO] Finish persist on a disk")
+			}
 		}
 	}()
 }

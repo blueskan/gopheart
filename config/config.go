@@ -7,6 +7,9 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
+const ConfigPath = "./config.yaml"
+const DbPath = "./gopheart.db"
+
 type SlackNotifier struct {
 	WebHook string `yaml:"web_hook" json:"web_hook"`
 	Channel string `yaml:"channel" json:"channel"`
@@ -42,7 +45,6 @@ type HealthCheck struct {
 
 type WebUI struct {
 	Port              string `yaml:"port" json:"port"`
-	CollectStats      bool   `yaml:"collect_stats" json:"collect_stats"`
 	FailureStatusCode string `yaml:"failure_status_code" json:"failure_status_code"`
 }
 

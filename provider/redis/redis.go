@@ -78,6 +78,7 @@ func (rp redisProvider) Heartbeat() bool {
 		Password:    rp.redisPassword,
 		DB:          0,
 		DialTimeout: rp.timeout,
+		IdleTimeout: rp.timeout,
 	})
 
 	pong, err := client.Ping().Result()

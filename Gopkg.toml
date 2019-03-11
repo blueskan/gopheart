@@ -40,3 +40,15 @@
 [[constraint]]
   branch = "master"
   name = "github.com/bradfitz/gomemcache"
+
+[[constraint]]
+  name = "github.com/Kelindar/binary"
+  version = "1.0.4"
+
+[[constraint]]
+  name = "gopkg.in/restruct.v1"
+  version = "1.0.0"
+
+[[constraint]]
+  name = "github.com/vmihailenco/msgpack"
+  version = "4.0.2"
