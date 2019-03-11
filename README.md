@@ -5,7 +5,7 @@ Supported Providers:
   - Url Provider [ COMPLETED ]
   - Redis Provider [ COMPLETED ]
   - Memcache Provider
-  - MongoDB Provider
+  - MongoDB Provider [ COMPLETED ]
   - MySQL Provider
   - PostgreSQL Provider
   - MSSQL Provider
