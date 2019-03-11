@@ -29,7 +29,7 @@ Features:
   - Creates Json Response automatically with provider infos ( If any error happened in any service you would return specific http status code, you can bind this url to your health check system )
   - If you open `stats option` in configuration, /stats endpoint available for downtime stats
 
-Todo:
+TODOs:
   - We should divide Scheduling and Persistent logic :(
   - We should provide tests
   - Notifier Supports [ IN PROGRESS ]
