@@ -66,7 +66,7 @@ func (c *Config) FromJson(path string) {
 	}
 
 	json.Unmarshal(configFile, c)
-	c.overrideDefaults()
+	c.overrideOmitValuesWithDefaults()
 }
 
 func (c *Config) FromYaml(path string) {
@@ -76,10 +76,10 @@ func (c *Config) FromYaml(path string) {
 	}
 
 	yaml.Unmarshal(configFile, c)
-	c.overrideDefaults()
+	c.overrideOmitValuesWithDefaults()
 }
 
-func (c *Config) overrideDefaults() {
+func (c *Config) overrideOmitValuesWithDefaults() {
 	for key, value := range c.HealthChecks {
 		if len(value.CheckInterval) <= 0 {
 			value.CheckInterval = c.Global.CheckInterval
