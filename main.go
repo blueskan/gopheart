@@ -13,7 +13,6 @@ func main() {
 	providerFactory := factory.NewProviderFactory()
 	providers := make([]provider.Provider, 0)
 
-	// Implement factory pattern
 	for key, value := range config.HealthChecks {
 		providers = append(providers, providerFactory.CreateProvider(key, value))
 	}
