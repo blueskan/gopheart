@@ -5,6 +5,7 @@ import (
 
 	"github.com/blueskan/gopheart/config"
 	"github.com/blueskan/gopheart/provider"
+	"github.com/blueskan/gopheart/provider/memcache"
 	"github.com/blueskan/gopheart/provider/mongodb"
 	"github.com/blueskan/gopheart/provider/redis"
 	"github.com/blueskan/gopheart/provider/url"
@@ -42,6 +43,15 @@ func (pf *providerFactory) CreateProvider(name string, config config.HealthCheck
 		)
 	case "mongodb":
 		return mongodb.NewMongoDbProvider(
+			name,
+			config.Source,
+			timeout,
+			interval,
+			config.RetryPolicy.DownThreshold,
+			config.RetryPolicy.UpThreshold,
+		)
+	case "memcache":
+		return memcache.NewMemcacheProvider(
 			name,
 			config.Source,
 			timeout,

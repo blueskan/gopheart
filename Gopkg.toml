@@ -36,3 +36,7 @@
 [[constraint]]
   name = "go.mongodb.org/mongo-driver"
   version = ">=1.0.0-rc2"
+
+[[constraint]]
+  branch = "master"
+  name = "github.com/bradfitz/gomemcache"

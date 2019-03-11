@@ -4,7 +4,7 @@ Simple healthchecking solution for many providers
 Supported Providers:
   - Url Provider [ COMPLETED ]
   - Redis Provider [ COMPLETED ]
-  - Memcache Provider
+  - Memcache Provider [ COMPLETED ]
   - MongoDB Provider [ COMPLETED ]
   - MySQL Provider
   - PostgreSQL Provider

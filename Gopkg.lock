@@ -2,6 +2,12 @@
 
 
 [[projects]]
+  branch = "master"
+  name = "github.com/bradfitz/gomemcache"
+  packages = ["memcache"]
+  revision = "bc664df9673713a0ccf26e3b55a673ec7301088b"
+
+[[projects]]
   name = "github.com/go-redis/redis"
   packages = [".","internal","internal/consistenthash","internal/hashtag","internal/pool","internal/proto","internal/util"]
   revision = "d22fde8721cc915a55aeb6b00944a76a92bfeb6e"
@@ -64,6 +70,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "166869107ce4d8b424a559f3987afaebd7e888e4cd35aebc6282e31cf5f3eaa3"
+  inputs-digest = "f9247845682f64ba7872f824351123f814d0c2b5003d8eb47155714c1d0e0014"
   solver-name = "gps-cdcl"
   solver-version = 1

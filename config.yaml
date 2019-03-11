@@ -48,3 +48,10 @@ health_checks:
       timeout: 15s
       down_threshold: 3
       up_threshold: 3
+  memcache:
+    type: memcache
+    source: 172.17.0.4:11211
+    retry_policy:
+      timeout: 15s
+      down_threshold: 3
+      up_threshold: 3
