@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/blueskan/gopheart/config"
+	"github.com/blueskan/gopheart/http"
 	"github.com/blueskan/gopheart/provider"
 	"github.com/blueskan/gopheart/provider/factory"
 )
@@ -19,4 +20,7 @@ func main() {
 
 	scheduler := provider.NewScheduler(providers)
 	scheduler.Schedule()
+
+	httpServer := http.NewHttpServer(scheduler)
+	httpServer.Listen(config.Global.WebUI.Port)
 }

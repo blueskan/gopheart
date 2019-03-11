@@ -17,19 +17,19 @@ type Scheduler interface {
 	Schedule()
 }
 
-type StateCode int8
+type StateCode string
 
 const (
-	UnHealthy StateCode = 0
-	Sick      StateCode = 1
-	Healthy   StateCode = 2
+	UnHealthy StateCode = "Unhealthy"
+	Sick      StateCode = "Sick"
+	Healthy   StateCode = "Healthy"
 )
 
 type Statistics struct {
-	RunningInterval     time.Duration
-	LastRunAt           time.Time
-	NextRunAt           time.Time
-	CurrentFailureCount int
-	CurrentSuccessCount int
-	State               StateCode
+	RunningInterval     time.Duration `json:"running_interval"`
+	LastRunAt           time.Time     `json:"last_run_at"`
+	NextRunAt           time.Time     `json:"next_run_at"`
+	CurrentFailureCount int           `json:"current_failure_count"`
+	CurrentSuccessCount int           `json:"current_success_count"`
+	State               StateCode     `json:"state"`
 }

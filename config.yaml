@@ -2,7 +2,7 @@
 global:
   web_ui:
     collect_stats: false # it's open /stats endpoint and persist incident reports to the disk
-    port: 6666 # Web UI Port [/ => json response, /stats => if collect_stats open you can show statistics]
+    port: 7050 # Web UI Port [/ => json response, /stats => if collect_stats open you can show statistics]
     failure_status_code: 400 # Failure status code for json response ( if any of services down )
   notifiers:
     threshold: 30
