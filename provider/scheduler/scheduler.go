@@ -1,25 +1,33 @@
-package provider
+package scheduler
 
 import (
 	"encoding/json"
 	"io/ioutil"
 	"log"
-	"sync"
 	"time"
 
 	"github.com/blueskan/gopheart/config"
+	"github.com/blueskan/gopheart/notifier"
+	p "github.com/blueskan/gopheart/provider"
 	"github.com/vmihailenco/msgpack"
 )
 
 type scheduler struct {
-	providers   []Provider
-	statistics  map[string]*Statistics
+	providers   []p.Provider
+	notifiers   map[string][]notifier.Notifier
+	statistics  map[string]*p.Statistics
 	persistence bool
 }
 
-func NewScheduler(providers []Provider, statistics map[string]*Statistics, persistOnDisk bool) Scheduler {
+func NewScheduler(
+	providers []p.Provider,
+	notifiers map[string][]notifier.Notifier,
+	statistics map[string]*p.Statistics,
+	persistOnDisk bool,
+) p.Scheduler {
 	scheduler := &scheduler{
 		providers:   providers,
+		notifiers:   notifiers,
 		persistence: persistOnDisk,
 	}
 
@@ -30,19 +38,20 @@ func NewScheduler(providers []Provider, statistics map[string]*Statistics, persi
 		return scheduler
 	}
 
-	scheduler.statistics = make(map[string]*Statistics)
+	scheduler.statistics = make(map[string]*p.Statistics)
 
 	for _, provider := range providers {
 		name := provider.GetName()
 
 		if _, exists := scheduler.statistics[name]; !exists {
-			scheduler.statistics[name] = &Statistics{
+			scheduler.statistics[name] = &p.Statistics{
+				ServiceName:         name,
 				CurrentFailureCount: 0,
 				CurrentSuccessCount: provider.GetUpThreshold(),
 				RunningInterval:     provider.GetInterval(),
 				NextRunAt:           time.Now().Add(provider.GetInterval()),
-				State:               Healthy,
-				AuditLogs:           make([]AuditLog, 0),
+				State:               p.Healthy,
+				AuditLogs:           make([]p.AuditLog, 0),
 			}
 		}
 	}
@@ -50,52 +59,49 @@ func NewScheduler(providers []Provider, statistics map[string]*Statistics, persi
 	return scheduler
 }
 
-func (s *scheduler) GetStatistics() map[string]*Statistics {
+func (s *scheduler) GetStatistics() map[string]*p.Statistics {
 	return s.statistics
 }
 
 func (s *scheduler) Schedule() {
 	go func() {
-		var waitGroup sync.WaitGroup
+		log.Printf("[INFO] Starting scheduling with %d providers.", len(s.providers))
 
-		for {
-			waitGroup.Add(len(s.providers))
-
-			log.Printf("[INFO] Starting scheduling with %d providers.", len(s.providers))
-
-			for _, provider := range s.providers {
-				go func(provider Provider) {
+		for _, provider := range s.providers {
+			go func(provider p.Provider) {
+				for {
 					name := provider.GetName()
 					log.Printf("[INFO] Healthcheck scheduling starting for `%s`.", name)
 
 					statistics := s.statistics[name]
 
-					waitCh := make(chan bool)
+					for {
+						canBeRunning := time.Now().After(statistics.NextRunAt) || statistics.LastRunAt.Unix() <= 0
 
-					go func() {
-						for {
-							canBeRunning := time.Now().After(statistics.NextRunAt) || statistics.LastRunAt.Unix() <= 0
-
-							if canBeRunning {
-								break
-							}
-
-							duration := statistics.NextRunAt.Sub(time.Now())
-
-							log.Printf("[INFO] Healthcheck scheduling waiting %f seconds for `%s`.", duration.Seconds(), name)
-							time.Sleep(duration)
+						if canBeRunning {
+							break
 						}
 
-						waitCh <- true
-					}()
+						duration := statistics.NextRunAt.Sub(time.Now())
 
-					<-waitCh
+						log.Printf("[INFO] Healthcheck scheduling waiting %f seconds for `%s`.", duration.Seconds(), name)
+						time.Sleep(duration)
+					}
 
 					log.Printf("[INFO] Doing healthcheck for service %s.", name)
+					resStartTime := time.Now()
 					isHealthy := provider.Heartbeat()
+					elapsedTime := time.Now().Sub(resStartTime).Nanoseconds()
 
 					status := "failed"
 					if isHealthy {
+						statistics.ResponseLogs = append([]p.ResponseLog{
+							{
+								Timestamp:   resStartTime,
+								ElapsedTime: elapsedTime,
+							},
+						}, statistics.ResponseLogs...)
+
 						status = "success"
 					}
 
@@ -112,49 +118,51 @@ func (s *scheduler) Schedule() {
 
 						if statistics.CurrentSuccessCount >= provider.GetUpThreshold() {
 							statistics.CurrentFailureCount = 0
-							statistics.State = Healthy
+							statistics.State = p.Healthy
 						} else {
-							statistics.State = Sick
+							statistics.State = p.Sick
 						}
 					} else if statistics.CurrentFailureCount <= provider.GetDownThreshold() {
 						statistics.CurrentFailureCount++
 
-						statistics.State = Sick
+						statistics.State = p.Sick
 					} else {
 						statistics.CurrentFailureCount++
+						statistics.CurrentSuccessCount = 0
 
-						statistics.State = UnHealthy
+						statistics.State = p.UnHealthy
 					}
 
 					if previousState != statistics.State {
-						statistics.AuditLogs = append([]AuditLog{
-							AuditLog{
+						statistics.AuditLogs = append([]p.AuditLog{
+							{
 								Timestamp:     time.Now(),
 								PreviousState: previousState,
 								NewState:      statistics.State,
 							},
 						}, statistics.AuditLogs...)
+
+						// Notify with notifiers
+						for _, notifier := range s.notifiers[name] {
+							notifier.Notify(*statistics)
+						}
 					}
 
 					json, _ := json.Marshal(statistics)
 					log.Printf("[INFO] Latest status for service `%s`:\n\n%s\n\n", name, string(json))
 
-					waitGroup.Done()
-				}(provider)
-			}
+					if s.persistence {
+						log.Printf("[INFO] Starting persist on a disk")
 
-			waitGroup.Wait()
+						statistics := s.GetStatistics()
+						data, _ := msgpack.Marshal(&statistics)
 
-			if s.persistence {
-				log.Printf("[INFO] Starting persist on a disk")
+						ioutil.WriteFile(config.DbPath, data, 0644)
 
-				statistics := s.GetStatistics()
-				data, _ := msgpack.Marshal(&statistics)
-
-				ioutil.WriteFile(config.DbPath, data, 0644)
-
-				log.Printf("[INFO] Finish persist on a disk")
-			}
+						log.Printf("[INFO] Finish persist on a disk")
+					}
+				}
+			}(provider)
 		}
 	}()
 }

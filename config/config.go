@@ -11,9 +11,10 @@ const ConfigPath = "./config.yaml"
 const DbPath = "./gopheart.db"
 
 type SlackNotifier struct {
-	WebHook string `yaml:"web_hook" json:"web_hook"`
-	Channel string `yaml:"channel" json:"channel"`
-	Message string `yaml:"message" json:"message"`
+	WebHook  string `yaml:"web_hook" json:"web_hook"`
+	Channel  string `yaml:"channel" json:"channel"`
+	Message  string `yaml:"message" json:"message"`
+	Username string `yaml:"username" json:"username"`
 }
 
 type EmailNotifier struct {
@@ -23,10 +24,15 @@ type EmailNotifier struct {
 	Message      string `yaml:"message" json:"message"`
 }
 
+type NotifierService struct {
+	Url     string `yaml:"url" json:"url"`
+	Message string `yaml:"message" json:"message"`
+	Extra   string `yaml:"extra" json:"extra"`
+}
+
 type Notifiers struct {
-	Threshold     int           `yaml:"threshold" json:"threshold"`
-	Slack         SlackNotifier `yaml:"slack" json:"slack"`
-	EmailNotifier EmailNotifier `yaml:"email" json:"email"`
+	Threshold int                        `yaml:"threshold" json:"threshold"`
+	Services  map[string]NotifierService `yaml:"services" json:"services"`
 }
 
 type RetryPolicy struct {
@@ -83,6 +89,26 @@ func (c *Config) FromYaml(path string) {
 
 func (c *Config) overrideOmitValuesWithDefaults() {
 	for key, value := range c.HealthChecks {
+		for serviceName, service := range value.Notifiers.Services {
+			if len(service.Url) <= 0 {
+				service.Url = c.Global.Notifiers.Services[serviceName].Url
+			}
+
+			if len(service.Message) <= 0 {
+				service.Message = c.Global.Notifiers.Services[serviceName].Message
+			}
+
+			if len(service.Extra) <= 0 {
+				service.Extra = c.Global.Notifiers.Services[serviceName].Extra
+			}
+
+			c.HealthChecks[key].Notifiers.Services[serviceName] = service
+		}
+
+		if value.Notifiers.Threshold <= 0 {
+			value.Notifiers.Threshold = c.Global.Notifiers.Threshold
+		}
+
 		if len(value.CheckInterval) <= 0 {
 			value.CheckInterval = c.Global.CheckInterval
 		}

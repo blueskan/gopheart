@@ -6,37 +6,45 @@ global:
     failure_status_code: 400 # Failure status code for json response ( if any of services down )
   notifiers:
     threshold: 30
-    slack:
-      web_hook: "http://fakeslackhook.com"
-      channel: "#alerts"
-      message: "Service `${service_name}` has been down since `${duration +m}` minutes."
-    email:
-      smtp_host: mail.test.com
-      smtp_username: test
-      smtp_password: test
-      message: "Service `${service_name}` has been down since `${duration +m}` minutes."
+    services:
+      slack:
+        url: "https://hooks.slack.com/services/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"
+        message: "Service `${service_name}` has been down since `${duration}`."
+        extra: "channel:#general,username:Gopheart"
+      email:
+        url: "smtp://test:test@mail.test.com"
+        message: "Service `${service_name}` has been down since `${duration}`."
   retry_policy:
     timeout: 3s
     down_threshold: 3
     up_threshold: 3
-  check_interval: 15s
+  check_interval: 10s
 
 # Health Checks
 health_checks:
   google.com:
     type: url
     source: https://google.com
-    check_interval: 3s
+    check_interval: 10s
     retry_policy:
       timeout: 3s
       down_threshold: 3
       up_threshold: 3
     notifiers:
-      slack:
-        message: "Hey its custom message i cant access google.com :("
+      threshold: 15
+      services:
+        - slack:
+            message: "Hey its custom message i cant access google.com :("
   redis:
     type: redis
     source: redis://172.17.0.2:6379
+    notifiers:
+      threshold: 30
+      services:
+        slack:
+          url: "https://hooks.slack.com/services/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"
+          message: "Service `${service_name}` has been down since `${duration}`."
+          extra: "channel:#general,username:Gopheart"
     retry_policy:
       timeout: 3s
       down_threshold: 3
@@ -44,6 +52,13 @@ health_checks:
   mongodb:
     type: mongodb
     source: mongodb://172.17.0.3:27017
+    notifiers:
+      threshold: 30
+      services:
+        slack:
+          url: "https://hooks.slack.com/services/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"
+          message: "Service `${service_name}` has been down since `${duration}`."
+          extra: "channel:#general,username:Gopheart"
     retry_policy:
       timeout: 3s
       down_threshold: 3
@@ -51,6 +66,13 @@ health_checks:
   memcache:
     type: memcache
     source: 172.17.0.4:11211
+    notifiers:
+      threshold: 30
+      services:
+        slack:
+          url: "https://hooks.slack.com/services/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"
+          message: "Service `${service_name}` has been down since `${duration}`."
+          extra: "channel:#general,username:Gopheart"
     retry_policy:
       timeout: 3s
       down_threshold: 3

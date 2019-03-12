@@ -6,21 +6,21 @@ Supported Providers:
   - Redis Provider [ COMPLETED ]
   - Memcache Provider [ COMPLETED ]
   - MongoDB Provider [ COMPLETED ]
-  - MySQL Provider
-  - PostgreSQL Provider
-  - MSSQL Provider
-  - Cassandra Provider
-  - CouchBase Provider
-  - HBase Provider
-  - Neo4J Provider
-  - ElasticSearch Provider
-  - Solr Provider
-  - RabbitMQ Provider
-  - Kafka Provider
+  - MySQL Provider [ COMPLETED ]
+  - PostgreSQL Provider [ COMPLETED ]
+  - MSSQL Provider [ COMPLETED ]
+  - Cassandra Provider [ COMPLETED ]
+  - CouchBase Provider [ COMPLETED ]
+  - HBase Provider [ COMPLETED - NEED SOME CONTROL ]
+  - Neo4J Provider [ TODO ]
+  - ElasticSearch Provider [ TODO ]
+  - Solr Provider [ TODO ]
+  - RabbitMQ Provider [ TODO ]
+  - Kafka Provider [ TODO ]
 
 Supported Notifiers:
-  - Slack Notifier
-  - Mail Notifier
+  - Slack Notifier [ COMPLETED ]
+  - Mail Notifier [ TODO ]
   
 Features:
   - Easy configuration JSON or YAML

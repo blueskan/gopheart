@@ -12,6 +12,7 @@
 *.out
 
 # Custom
+.idea
 vendor
 gopheart
 gopheart.db

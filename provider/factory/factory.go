@@ -1,6 +1,11 @@
 package factory
 
 import (
+	"github.com/blueskan/gopheart/provider/cassandra"
+	"github.com/blueskan/gopheart/provider/couchbase"
+	"github.com/blueskan/gopheart/provider/mssql"
+	"github.com/blueskan/gopheart/provider/mysql"
+	"github.com/blueskan/gopheart/provider/postgresql"
 	"time"
 
 	"github.com/blueskan/gopheart/config"
@@ -52,6 +57,51 @@ func (pf *providerFactory) CreateProvider(name string, config config.HealthCheck
 		)
 	case "memcache":
 		return memcache.NewMemcacheProvider(
+			name,
+			config.Source,
+			timeout,
+			interval,
+			config.RetryPolicy.DownThreshold,
+			config.RetryPolicy.UpThreshold,
+		)
+	case "mysql":
+		return mysql.NewMysqlProvider(
+			name,
+			config.Source,
+			timeout,
+			interval,
+			config.RetryPolicy.DownThreshold,
+			config.RetryPolicy.UpThreshold,
+		)
+	case "postgresql":
+		return postgresql.NewPostgresqlProvider(
+			name,
+			config.Source,
+			timeout,
+			interval,
+			config.RetryPolicy.DownThreshold,
+			config.RetryPolicy.UpThreshold,
+		)
+	case "mssql":
+		return mssql.NewMssqlProvider(
+			name,
+			config.Source,
+			timeout,
+			interval,
+			config.RetryPolicy.DownThreshold,
+			config.RetryPolicy.UpThreshold,
+		)
+	case "cassandra":
+		return cassandra.NewCassandraProvider(
+			name,
+			config.Source,
+			timeout,
+			interval,
+			config.RetryPolicy.DownThreshold,
+			config.RetryPolicy.UpThreshold,
+		)
+	case "couchbase":
+		return couchbase.NewCouchbaseProvider(
 			name,
 			config.Source,
 			timeout,

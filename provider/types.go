@@ -25,6 +25,11 @@ const (
 	Healthy   StateCode = "Healthy"
 )
 
+type ResponseLog struct {
+	Timestamp   time.Time `json:"timestamp"`
+	ElapsedTime int64     `json:"elapsed_time"`
+}
+
 type AuditLog struct {
 	Timestamp     time.Time `json:"timestamp"`
 	PreviousState StateCode `json:"previous_state"`
@@ -32,6 +37,7 @@ type AuditLog struct {
 }
 
 type Statistics struct {
+	ServiceName         string        `json:"service_name"`
 	RunningInterval     time.Duration `json:"running_interval"`
 	LastRunAt           time.Time     `json:"last_run_at"`
 	NextRunAt           time.Time     `json:"next_run_at"`
@@ -39,4 +45,5 @@ type Statistics struct {
 	CurrentSuccessCount int           `json:"current_success_count"`
 	State               StateCode     `json:"state"`
 	AuditLogs           []AuditLog    `json:"audit_logs"`
+	ResponseLogs        []ResponseLog `json:"response_logs"`
 }
