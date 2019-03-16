@@ -3,9 +3,9 @@
 Pulse project aims make healthcheck process for various providers so simply,
 also have 2 notification options for now.
 
-###Pulse Concepts
+### Pulse Concepts
 
-#####Configuration
+##### Configuration
 There are 2 configuration method for Pulse.
 
 - YAML Configuration
@@ -131,7 +131,7 @@ This means zeus_caching_server using global settings.
 - `source` parameter is addresses of servers.
 - `notifiers` parameter is notification
 
-#####Provider
+##### Provider
 Provider is simply method for say to pulse how achieve healthcheck process.
 
 Supported Providers:
@@ -198,7 +198,7 @@ change occured you would get slack and e-mail notifications.
 
 We define 2 environment variables for every custom type health checks `SERVICE_NAME` and `TIMEOUT`. 
 
-#####Notifier
+##### Notifier
 Notifiers report healthcheck results to you.
 
 Supported Notifiers:
@@ -220,7 +220,7 @@ Features:
   - Creates Json Response automatically with provider infos ( If any error happened in any service you would return specific http status code, you can bind this url to your health check system )
   - If you open `stats option` in configuration, /stats endpoint available for downtime stats [ TODO ]
 
-#CAUTION
-###This project is still under development and not production ready.
+# CAUTION
+### This project is still under development and not production ready.
 
 If you want to contribute with any idea or code feel free to send me an e-mail via me@batikansenemoglu.com or pull request.
