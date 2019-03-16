@@ -16,14 +16,14 @@ type redisProvider struct {
 	redisPort     string
 	timeout       time.Duration
 	interval      time.Duration
-	downThreshold int
-	upThreshold   int
+	downThreshold int64
+	upThreshold   int64
 }
 
 func NewRedisProvider(
 	name, connectionString string,
 	timeout, interval time.Duration,
-	downThreshold, upThreshold int,
+	downThreshold, upThreshold int64,
 ) provider.Provider {
 	regex := regexp.MustCompile(`redis:\/\/(.*?)@(.*?):([0-9]*)`)
 	res := regex.FindStringSubmatch(connectionString)
@@ -64,11 +64,11 @@ func (rp redisProvider) GetInterval() time.Duration {
 	return rp.interval
 }
 
-func (rp redisProvider) GetDownThreshold() int {
+func (rp redisProvider) GetDownThreshold() int64 {
 	return rp.downThreshold
 }
 
-func (rp redisProvider) GetUpThreshold() int {
+func (rp redisProvider) GetUpThreshold() int64 {
 	return rp.upThreshold
 }
 

@@ -72,3 +72,31 @@
 [[constraint]]
   branch = "master"
   name = "github.com/tsuna/gohbase"
+
+[[constraint]]
+  branch = "master"
+  name = "github.com/rtt/Go-Solr"
+
+[[constraint]]
+  branch = "master"
+  name = "github.com/streadway/amqp"
+
+[[constraint]]
+  branch = "master"
+  name = "github.com/dimiro1/banner"
+
+[[constraint]]
+  name = "github.com/mattn/go-colorable"
+  version = "0.1.1"
+
+[[constraint]]
+  branch = "master"
+  name = "github.com/logrusorgru/aurora"
+
+[[constraint]]
+  name = "github.com/hako/durafmt"
+  version = "1.0.0"
+
+[[constraint]]
+  name = "gopkg.in/gomail.v2"
+  version = "2.0.0"

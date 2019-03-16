@@ -14,14 +14,14 @@ type memcacheProvider struct {
 	addresses        []string
 	timeout          time.Duration
 	interval         time.Duration
-	downThreshold    int
-	upThreshold      int
+	downThreshold    int64
+	upThreshold      int64
 }
 
 func NewMemcacheProvider(
 	name, connectionString string,
 	timeout, interval time.Duration,
-	downThreshold, upThreshold int,
+	downThreshold, upThreshold int64,
 ) provider.Provider {
 	return &memcacheProvider{
 		name:             name,
@@ -42,17 +42,21 @@ func (mp memcacheProvider) GetInterval() time.Duration {
 	return mp.interval
 }
 
-func (mp memcacheProvider) GetDownThreshold() int {
+func (mp memcacheProvider) GetDownThreshold() int64 {
 	return mp.downThreshold
 }
 
-func (mp memcacheProvider) GetUpThreshold() int {
+func (mp memcacheProvider) GetUpThreshold() int64 {
 	return mp.upThreshold
 }
 
 func (mp memcacheProvider) Heartbeat() bool {
 	mc := memcache.New(mp.addresses...)
-	mc.Set(&memcache.Item{Key: "gopheart_health_check", Value: []byte("1")})
+	err := mc.Set(&memcache.Item{Key: "gopheart_health_check", Value: []byte("1")})
+
+	if err != nil {
+		return false
+	}
 
 	it, err := mc.Get("gopheart_health_check")
 

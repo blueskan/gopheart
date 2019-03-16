@@ -3,9 +3,14 @@ package factory
 import (
 	"github.com/blueskan/gopheart/provider/cassandra"
 	"github.com/blueskan/gopheart/provider/couchbase"
+	"github.com/blueskan/gopheart/provider/custom"
+	"github.com/blueskan/gopheart/provider/elasticsearch"
+	"github.com/blueskan/gopheart/provider/hbase"
 	"github.com/blueskan/gopheart/provider/mssql"
 	"github.com/blueskan/gopheart/provider/mysql"
 	"github.com/blueskan/gopheart/provider/postgresql"
+	"github.com/blueskan/gopheart/provider/rabbitmq"
+	"github.com/blueskan/gopheart/provider/solr"
 	"time"
 
 	"github.com/blueskan/gopheart/config"
@@ -102,6 +107,51 @@ func (pf *providerFactory) CreateProvider(name string, config config.HealthCheck
 		)
 	case "couchbase":
 		return couchbase.NewCouchbaseProvider(
+			name,
+			config.Source,
+			timeout,
+			interval,
+			config.RetryPolicy.DownThreshold,
+			config.RetryPolicy.UpThreshold,
+		)
+	case "hbase":
+		return hbase.NewHBaseProvider(
+			name,
+			config.Source,
+			timeout,
+			interval,
+			config.RetryPolicy.DownThreshold,
+			config.RetryPolicy.UpThreshold,
+		)
+	case "elasticsearch":
+		return elasticsearch.NewElasticsearchProvider(
+			name,
+			config.Source,
+			timeout,
+			interval,
+			config.RetryPolicy.DownThreshold,
+			config.RetryPolicy.UpThreshold,
+		)
+	case "solr":
+		return solr.NewSolrProvider(
+			name,
+			config.Source,
+			timeout,
+			interval,
+			config.RetryPolicy.DownThreshold,
+			config.RetryPolicy.UpThreshold,
+		)
+	case "rabbitmq":
+		return rabbitmq.NewRabbitmqProvider(
+			name,
+			config.Source,
+			timeout,
+			interval,
+			config.RetryPolicy.DownThreshold,
+			config.RetryPolicy.UpThreshold,
+		)
+	case "custom":
+		return custom.NewCustomProvider(
 			name,
 			config.Source,
 			timeout,

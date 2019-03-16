@@ -12,14 +12,14 @@ type mssqlProvider struct {
 	connectionString string
 	timeout          time.Duration
 	interval         time.Duration
-	downThreshold    int
-	upThreshold      int
+	downThreshold    int64
+	upThreshold      int64
 }
 
 func NewMssqlProvider(
 	name, connectionString string,
 	timeout, interval time.Duration,
-	downThreshold, upThreshold int,
+	downThreshold, upThreshold int64,
 ) provider.Provider {
 	return &mssqlProvider{
 		name:             name,
@@ -39,11 +39,11 @@ func (mp mssqlProvider) GetInterval() time.Duration {
 	return mp.interval
 }
 
-func (mp mssqlProvider) GetDownThreshold() int {
+func (mp mssqlProvider) GetDownThreshold() int64 {
 	return mp.downThreshold
 }
 
-func (mp mssqlProvider) GetUpThreshold() int {
+func (mp mssqlProvider) GetUpThreshold() int64 {
 	return mp.upThreshold
 }
 

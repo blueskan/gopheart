@@ -14,14 +14,14 @@ type cassandraProvider struct {
 	addresses        []string
 	timeout          time.Duration
 	interval         time.Duration
-	downThreshold    int
-	upThreshold      int
+	downThreshold    int64
+	upThreshold      int64
 }
 
 func NewCassandraProvider(
 	name, connectionString string,
 	timeout, interval time.Duration,
-	downThreshold, upThreshold int,
+	downThreshold, upThreshold int64,
 ) provider.Provider {
 	return &cassandraProvider{
 		name:             name,
@@ -42,11 +42,11 @@ func (cp cassandraProvider) GetInterval() time.Duration {
 	return cp.interval
 }
 
-func (cp cassandraProvider) GetDownThreshold() int {
+func (cp cassandraProvider) GetDownThreshold() int64 {
 	return cp.downThreshold
 }
 
-func (cp cassandraProvider) GetUpThreshold() int {
+func (cp cassandraProvider) GetUpThreshold() int64 {
 	return cp.upThreshold
 }
 

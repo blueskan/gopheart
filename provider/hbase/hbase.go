@@ -12,14 +12,14 @@ type hBaseProvider struct {
 	connectionString string
 	timeout          time.Duration
 	interval         time.Duration
-	downThreshold    int
-	upThreshold      int
+	downThreshold    int64
+	upThreshold      int64
 }
 
 func NewHBaseProvider(
 	name, connectionString string,
 	timeout, interval time.Duration,
-	downThreshold, upThreshold int,
+	downThreshold, upThreshold int64,
 ) provider.Provider {
 	return &hBaseProvider{
 		name:             name,
@@ -39,11 +39,11 @@ func (hp hBaseProvider) GetInterval() time.Duration {
 	return hp.interval
 }
 
-func (hp hBaseProvider) GetDownThreshold() int {
+func (hp hBaseProvider) GetDownThreshold() int64 {
 	return hp.downThreshold
 }
 
-func (hp hBaseProvider) GetUpThreshold() int {
+func (hp hBaseProvider) GetUpThreshold() int64 {
 	return hp.upThreshold
 }
 
@@ -51,7 +51,6 @@ func (hp hBaseProvider) Heartbeat() bool {
 	client := gohbase.NewClient(hp.connectionString)
 	defer client.Close()
 
-	// Check this thing
 	if client == nil {
 		return false
 	}

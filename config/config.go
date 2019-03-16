@@ -7,22 +7,8 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
-const ConfigPath = "./config.yaml"
-const DbPath = "./gopheart.db"
-
-type SlackNotifier struct {
-	WebHook  string `yaml:"web_hook" json:"web_hook"`
-	Channel  string `yaml:"channel" json:"channel"`
-	Message  string `yaml:"message" json:"message"`
-	Username string `yaml:"username" json:"username"`
-}
-
-type EmailNotifier struct {
-	SMTPHost     string `yaml:"smtp_host" json:"smtp_host"`
-	SMTPUsername string `yaml:"smtp_username" json:"smtp_username"`
-	SMTPPassword string `yaml:"smtp_password" json:"smtp_password"`
-	Message      string `yaml:"message" json:"message"`
-}
+var ConfigPath = "./config.yaml"
+var DbPath = "./gopheart.db"
 
 type NotifierService struct {
 	Url     string `yaml:"url" json:"url"`
@@ -37,8 +23,8 @@ type Notifiers struct {
 
 type RetryPolicy struct {
 	Timeout       string `yaml:"timeout" json:"timeout"`
-	DownThreshold int    `yaml:"down_threshold" json:"down_threshold"`
-	UpThreshold   int    `yaml:"up_threshold" json:"up_threshold"`
+	DownThreshold int64  `yaml:"down_threshold" json:"down_threshold"`
+	UpThreshold   int64  `yaml:"up_threshold" json:"up_threshold"`
 }
 
 type HealthCheck struct {
@@ -52,14 +38,20 @@ type HealthCheck struct {
 type WebUI struct {
 	Port              string `yaml:"port" json:"port"`
 	FailureStatusCode string `yaml:"failure_status_code" json:"failure_status_code"`
+	AuditLogLimit     int    `yaml:"audit_log_limit" json:"audit_log_limit"`
+	ResponseLogLimit  int    `yaml:"response_log_limit" json:"response_log_limit"`
 }
 
 type GlobalConfiguration struct {
-	WebUI         WebUI  `yaml:"web_ui" json:"web_ui"`
-	CollectStats  bool   `yaml:"collect_stats" json:"collect_stats"`
-	CheckInterval string `yaml:"check_interval" json:"check_interval"`
-	Notifiers     Notifiers
-	RetryPolicy   RetryPolicy
+	WebUI                      WebUI  `yaml:"web_ui" json:"web_ui"`
+	CollectStats               bool   `yaml:"collect_stats" json:"collect_stats"`
+	AuditLogRotation           int    `yaml:"audit_log_rotation" json:"audit_log_rotation"`
+	AuditLogRotationEnabled    bool   `yaml:"audit_log_rotation_enabled" json:"audit_log_rotation_enabled"`
+	ResponseLogRotation        int    `yaml:"response_log_rotation" json:"response_log_rotation"`
+	ResponseLogRotationEnabled bool   `yaml:"response_log_rotation_enabled" json:"response_log_rotation_enabled"`
+	CheckInterval              string `yaml:"check_interval" json:"check_interval"`
+	Notifiers                  Notifiers
+	RetryPolicy                RetryPolicy
 }
 
 type Config struct {

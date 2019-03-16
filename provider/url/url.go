@@ -12,14 +12,14 @@ type urlProvider struct {
 	url           string
 	timeout       time.Duration
 	interval      time.Duration
-	downThreshold int
-	upThreshold   int
+	downThreshold int64
+	upThreshold   int64
 }
 
 func NewUrlProvider(
 	name, url string,
 	timeout, interval time.Duration,
-	downThreshold, upThreshold int,
+	downThreshold, upThreshold int64,
 ) provider.Provider {
 	return &urlProvider{
 		name:          name,
@@ -39,15 +39,14 @@ func (up urlProvider) GetInterval() time.Duration {
 	return up.interval
 }
 
-func (up urlProvider) GetDownThreshold() int {
+func (up urlProvider) GetDownThreshold() int64 {
 	return up.downThreshold
 }
 
-func (up urlProvider) GetUpThreshold() int {
+func (up urlProvider) GetUpThreshold() int64 {
 	return up.upThreshold
 }
 
-// TODO provide other http verbs also extra headers and status code checks
 func (up urlProvider) Heartbeat() bool {
 	timeout := time.Duration(up.timeout)
 

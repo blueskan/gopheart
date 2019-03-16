@@ -1,0 +1,21 @@
+   _ (`-.                         .-')      ('-.
+  ( (OO  )                       ( OO ).  _(  OO)
+ _.`     \,--. ,--.    ,--.     (_)---\_)(,------.
+(__...--''|  | |  |    |  |.-') /    _ |  |  .---'
+ |  /  | ||  | | .-')  |  | OO )\  :` `.  |  |
+ |  |_.' ||  |_|( OO ) |  |`-' | '..`''.)(|  '--.
+ |  .___.'|  | | `-' /(|  '---.'.-._)   \ |  .--'
+ |  |    ('  '-'(_.-'  |      | \       / |  `---.
+ `--'      `-----'     `------'  `-----'  `------'
+
+{{ .AnsiColor.BrightGreen }}Pulse Version:{{ .AnsiColor.Default }} 0.1.0
+
+{{ .AnsiColor.BrightGreen }}Go Version:{{ .AnsiColor.Default }} {{ .GoVersion }}
+{{ .AnsiColor.BrightGreen }}GOOS:{{ .AnsiColor.Default }} {{ .GOOS }}
+{{ .AnsiColor.BrightGreen }}GOARCH:{{ .AnsiColor.Default }} {{ .GOARCH }}
+{{ .AnsiColor.BrightGreen }}Num CPU:{{ .AnsiColor.Default }} {{ .NumCPU }}
+{{ .AnsiColor.BrightGreen }}GOPATH:{{ .AnsiColor.Default }} {{ .GOPATH }}
+{{ .AnsiColor.BrightGreen }}GOROOT:{{ .AnsiColor.Default }} {{ .GOROOT }}
+{{ .AnsiColor.BrightGreen }}Compiler:{{ .AnsiColor.Default }} {{ .Compiler }}
+
+{{ .AnsiColor.BrightGreen }}Process Execution Time:{{ .AnsiColor.Default }} {{ .Now "Monday, 2 Jan 2006" }}

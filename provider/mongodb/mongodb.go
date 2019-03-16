@@ -15,14 +15,14 @@ type mongoDbProvider struct {
 	connectionString string
 	timeout          time.Duration
 	interval         time.Duration
-	downThreshold    int
-	upThreshold      int
+	downThreshold    int64
+	upThreshold      int64
 }
 
 func NewMongoDbProvider(
 	name, connectionString string,
 	timeout, interval time.Duration,
-	downThreshold, upThreshold int,
+	downThreshold, upThreshold int64,
 ) provider.Provider {
 	return &mongoDbProvider{
 		name:             name,
@@ -42,11 +42,11 @@ func (mdp mongoDbProvider) GetInterval() time.Duration {
 	return mdp.interval
 }
 
-func (mdp mongoDbProvider) GetDownThreshold() int {
+func (mdp mongoDbProvider) GetDownThreshold() int64 {
 	return mdp.downThreshold
 }
 
-func (mdp mongoDbProvider) GetUpThreshold() int {
+func (mdp mongoDbProvider) GetUpThreshold() int64 {
 	return mdp.upThreshold
 }
 

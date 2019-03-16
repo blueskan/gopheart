@@ -1,13 +1,13 @@
-package couchbase
+package rabbitmq
 
 import (
-	"github.com/couchbase/go-couchbase"
+	"github.com/streadway/amqp"
 	"time"
 
 	"github.com/blueskan/gopheart/provider"
 )
 
-type couchbaseProvider struct {
+type rabbitmqProvider struct {
 	name             string
 	connectionString string
 	timeout          time.Duration
@@ -16,12 +16,12 @@ type couchbaseProvider struct {
 	upThreshold      int64
 }
 
-func NewCouchbaseProvider(
+func NewRabbitmqProvider(
 	name, connectionString string,
 	timeout, interval time.Duration,
 	downThreshold, upThreshold int64,
 ) provider.Provider {
-	return &couchbaseProvider{
+	return &rabbitmqProvider{
 		name:             name,
 		connectionString: connectionString,
 		timeout:          timeout,
@@ -31,24 +31,24 @@ func NewCouchbaseProvider(
 	}
 }
 
-func (cp couchbaseProvider) GetName() string {
-	return cp.name
+func (rmqp rabbitmqProvider) GetName() string {
+	return rmqp.name
 }
 
-func (cp couchbaseProvider) GetInterval() time.Duration {
-	return cp.interval
+func (rmqp rabbitmqProvider) GetInterval() time.Duration {
+	return rmqp.interval
 }
 
-func (cp couchbaseProvider) GetDownThreshold() int64 {
-	return cp.downThreshold
+func (rmqp rabbitmqProvider) GetDownThreshold() int64 {
+	return rmqp.downThreshold
 }
 
-func (cp couchbaseProvider) GetUpThreshold() int64 {
-	return cp.upThreshold
+func (rmqp rabbitmqProvider) GetUpThreshold() int64 {
+	return rmqp.upThreshold
 }
 
-func (cp couchbaseProvider) Heartbeat() bool {
-	_, err := couchbase.Connect(cp.connectionString)
+func (rmqp rabbitmqProvider) Heartbeat() bool {
+	_, err := amqp.Dial(rmqp.connectionString)
 
 	if err != nil {
 		return false

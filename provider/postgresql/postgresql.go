@@ -12,14 +12,14 @@ type postgresqlProvider struct {
 	connectionString string
 	timeout          time.Duration
 	interval         time.Duration
-	downThreshold    int
-	upThreshold      int
+	downThreshold    int64
+	upThreshold      int64
 }
 
 func NewPostgresqlProvider(
 	name, connectionString string,
 	timeout, interval time.Duration,
-	downThreshold, upThreshold int,
+	downThreshold, upThreshold int64,
 ) provider.Provider {
 	return &postgresqlProvider{
 		name:             name,
@@ -39,11 +39,11 @@ func (pp postgresqlProvider) GetInterval() time.Duration {
 	return pp.interval
 }
 
-func (pp postgresqlProvider) GetDownThreshold() int {
+func (pp postgresqlProvider) GetDownThreshold() int64 {
 	return pp.downThreshold
 }
 
-func (pp postgresqlProvider) GetUpThreshold() int {
+func (pp postgresqlProvider) GetUpThreshold() int64 {
 	return pp.upThreshold
 }
 

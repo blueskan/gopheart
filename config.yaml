@@ -1,9 +1,15 @@
 # Global Configuration
 global:
-  collect_stats: true # persistence mode [open|closed]
+  collect_stats: false # persistence mode [open|closed]
+  audit_log_rotation_enabled: true
+  audit_log_rotation: 20
+  response_log_rotation_enabled: true
+  response_log_rotation: 20
   web_ui:
     port: 7051 # Web UI Port [/ => json response, /stats => if collect_stats open you can show statistics]
     failure_status_code: 400 # Failure status code for json response ( if any of services down )
+    audit_log_limit: 10
+    response_log_limit: 10
   notifiers:
     threshold: 30
     services:
@@ -12,7 +18,7 @@ global:
         message: "Service `${service_name}` has been down since `${duration}`."
         extra: "channel:#general,username:Gopheart"
       email:
-        url: "smtp://test:test@mail.test.com"
+        url: "smtp://test:test@email.test.com:1025"
         message: "Service `${service_name}` has been down since `${duration}`."
   retry_policy:
     timeout: 3s
@@ -22,10 +28,10 @@ global:
 
 # Health Checks
 health_checks:
-  google.com:
-    type: url
-    source: https://google.com
-    check_interval: 10s
+  custom_test:
+    type: custom
+    source: python ./custom/ping.py
+    check_interval: 30s
     retry_policy:
       timeout: 3s
       down_threshold: 3
@@ -33,47 +39,9 @@ health_checks:
     notifiers:
       threshold: 15
       services:
-        - slack:
-            message: "Hey its custom message i cant access google.com :("
-  redis:
-    type: redis
-    source: redis://172.17.0.2:6379
-    notifiers:
-      threshold: 30
-      services:
         slack:
-          url: "https://hooks.slack.com/services/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"
+          message: "Hey its custom message i cant access google.com :("
+        email:
+          url: "smtp://test:test@localhost:1025"
           message: "Service `${service_name}` has been down since `${duration}`."
-          extra: "channel:#general,username:Gopheart"
-    retry_policy:
-      timeout: 3s
-      down_threshold: 3
-      up_threshold: 3
-  mongodb:
-    type: mongodb
-    source: mongodb://172.17.0.3:27017
-    notifiers:
-      threshold: 30
-      services:
-        slack:
-          url: "https://hooks.slack.com/services/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"
-          message: "Service `${service_name}` has been down since `${duration}`."
-          extra: "channel:#general,username:Gopheart"
-    retry_policy:
-      timeout: 3s
-      down_threshold: 3
-      up_threshold: 3
-  memcache:
-    type: memcache
-    source: 172.17.0.4:11211
-    notifiers:
-      threshold: 30
-      services:
-        slack:
-          url: "https://hooks.slack.com/services/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"
-          message: "Service `${service_name}` has been down since `${duration}`."
-          extra: "channel:#general,username:Gopheart"
-    retry_policy:
-      timeout: 3s
-      down_threshold: 3
-      up_threshold: 3
+          extra: "from:alert@pulse.com,title:Down Alert - Pulse,recipients:down@pulse.com|incident@pulse.com|sysadmin@pulse.com"

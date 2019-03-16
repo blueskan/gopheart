@@ -6,5 +6,5 @@ import (
 )
 
 type NotifierFactory interface {
-	CreateNotifier(name, notifierType string, config config.NotifierService) notifier.Notifier
+	CreateNotifier(name, notifierType string, config config.NotifierService, threshold int) notifier.Notifier
 }

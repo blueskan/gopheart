@@ -11,15 +11,25 @@ type slack struct {
 	username   string
 	channel    string
 	template   string
+	threshold  int
 }
 
-func NewSlack(webhookUrl, username, channel, template string) *slack {
+func NewSlack(webhookUrl, username, channel, template string, threshold int) *slack {
 	return &slack{
 		webhookUrl: webhookUrl,
 		username:   username,
 		channel:    channel,
 		template:   template,
+		threshold:  threshold,
 	}
+}
+
+func (s *slack) GetThreshold() int {
+	return s.threshold
+}
+
+func (s *slack) GetName() string {
+	return "slack"
 }
 
 func (s *slack) Notify(statistics provider.Statistics) error {
