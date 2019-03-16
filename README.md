@@ -121,32 +121,32 @@ health_checks:
 ###	Foreknowledge
 
 Healthcheck states are defined like this:
-- Initial: Initial state of healthcheck definition
-- Unhealthy: This state indicate obviously your service is down
-- Sick: This state is temporary between Healthy and Unhealthy states
-- Healthy: Everything is good :)
+- `Initial`: Initial state of healthcheck definition
+- `Unhealthy`: This state indicate obviously your service is down
+- `Sick`: This state is temporary between Healthy and Unhealthy states
+- `Healthy`: Everything is good :)
 
 All Global Configurations:
-- collect_stats [bool] - Manage persistence mode if you open this after exit pulse process,
+- `collect_stats` [bool] - Manage persistence mode if you open this after exit pulse process,
 your previous healthcheck response logs and audit logs stay. More technical details: it's creates db file
 in your file system, it`s simply consist of msgpack encoded statistics information. And after you re-run process
 it's load this database.
-- audit_log_rotation_enabled [bool] - Too many audit logs is not good for performance manner and space complexity, you can enable this option for more reduced disk footprint.
-- audit_log_rotation [int] - If you enable `audit_log_rotation_enabled` then this configuration key is all about limit the audit logs.
-- response_log_rotation_enabled [bool] - Same with audit_log_rotation_enabled
-- response_log_rotation [int] - Same with audit_log_rotation
-- web_ui.port [int] - Web UI port for Pulse
-- web_ui.failure_status_code [int] - If any service in health checks definition failed this status code send from server instead of HTTP 200 OK.
-- web_ui.audit_log_limit [int] - Limits the audit logs in json response.
-- web_ui.response_log_limit [int] - Limits the response logs in json response.
-- notifiers [Notifier] - Notification defaults, notification services and threshold.
-- notifiers.threshold [int]: Think of case like your service is down and health check translate to unhealthy state,
+- `audit_log_rotation_enabled` [bool] - Too many audit logs is not good for performance manner and space complexity, you can enable this option for more reduced disk footprint.
+- `audit_log_rotation` [int] - If you enable `audit_log_rotation_enabled` then this configuration key is all about limit the audit logs.
+- `response_log_rotation_enabled` [bool] - Same with audit_log_rotation_enabled
+- `response_log_rotation` [int] - Same with audit_log_rotation
+- `web_ui.port` [int] - Web UI port for Pulse
+- `web_ui.failure_status_code` [int] - If any service in health checks definition failed this status code send from server instead of HTTP 200 OK.
+- `web_ui.audit_log_limit` [int] - Limits the audit logs in json response.
+- `web_ui.response_log_limit` [int] - Limits the response logs in json response.
+- `notifiers` [Notifier] - Notification defaults, notification services and threshold.
+- `notifiers.threshold` [int]: Think of case like your service is down and health check translate to unhealthy state,
 if you give threshold to 30 it's notify service is still down information after every 30 times healthcheck.
-- retry_policy.timeout [string] - Timeout duration for health check request.
-- retry_policy.down_threshold [int] - In example if you specify this value 3, after get 3 times error from healthcheck,
+- `retry_policy.timeout` [string] - Timeout duration for health check request.
+- `retry_policy.down_threshold` [int] - In example if you specify this value 3, after get 3 times error from healthcheck,
 healthcheck state transition to sick.
-- retry_policy.up_threshold [int] - Same with down_threshold but works for healthy state.
-- check_interval [string] - Global check interval, this value override health check definitions which is check_interval definition omitted.
+- `retry_policy.up_threshold` [int] - Same with down_threshold but works for healthy state.
+- `check_interval` [string] - Global check interval, this value override health check definitions which is check_interval definition omitted.
 
 Anatomy of Health check definition:
 
