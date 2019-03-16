@@ -5,6 +5,52 @@ also have 2 notification options for now.
 
 ### Pulse Concepts
 
+Optionally you can specify database and configuration file with `-config` and `-database` flags.
+
+##### Pulse In Action
+
+```
+   _ (`-.                         .-')      ('-.
+  ( (OO  )                       ( OO ).  _(  OO)
+ _.`     \,--. ,--.    ,--.     (_)---\_)(,------.
+(__...--''|  | |  |    |  |.-') /    _ |  |  .---'
+ |  /  | ||  | | .-')  |  | OO )\  :` `.  |  |
+ |  |_.' ||  |_|( OO ) |  |`-' | '..`''.)(|  '--.
+ |  .___.'|  | | `-' /(|  '---.'.-._)   \ |  .--'
+ |  |    ('  '-'(_.-'  |      | \       / |  `---.
+ `--'      `-----'     `------'  `-----'  `------'
+
+Pulse Version: 0.1.0
+
+Go Version: go1.10.3
+GOOS: linux
+GOARCH: amd64
+Num CPU: 4
+GOPATH: /home/blueskan/go
+GOROOT: /usr/local/go
+Compiler: gc
+
+Process Execution Time: Saturday, 16 Mar 2019
+[2019-03-16 23:32:58] [INFO]: Open configuration file `./config.yaml`
+[2019-03-16 23:32:58] [SUCCESS]: Parse configuration successfully
+[2019-03-16 23:32:58] [SUCCESS]: Web Server listening on port 7051
+[2019-03-16 23:32:58] [INFO]: Starting scheduling healthchecks with 1 providers
+[2019-03-16 23:32:58] [INFO]: Healthcheck scheduling starting for `custom_test`.
+[2019-03-16 23:32:58] [INFO]: Doing healthcheck for service custom_test.
+[2019-03-16 23:32:59] [SUCCESS]: Healthcheck successful for `custom_test`, elapsed time: 534 milliseconds
+[2019-03-16 23:32:59] [INFO]: Healthcheck scheduling starting for `custom_test`.
+[2019-03-16 23:33:09] [INFO]: Doing healthcheck for service custom_test.
+[2019-03-16 23:33:09] [SUCCESS]: Healthcheck successful for `custom_test`, elapsed time: 276 milliseconds
+[2019-03-16 23:33:09] [INFO]: Healthcheck scheduling starting for `custom_test`.
+[2019-03-16 23:33:19] [INFO]: Doing healthcheck for service custom_test.
+[2019-03-16 23:33:19] [SUCCESS]: Healthcheck successful for `custom_test`, elapsed time: 262 milliseconds
+[2019-03-16 23:33:19] [INFO]: Healthcheck scheduling starting for `custom_test`.
+[2019-03-16 23:33:19] [INFO]: Notify service `custom_test` status change to `slack`.
+[2019-03-16 23:33:20] [SUCCESS]: Successfully notify service `custom_test` status change to `slack`.
+[2019-03-16 23:33:20] [INFO]: Notify service `custom_test` status change to `email`.
+[2019-03-16 23:33:20] [SUCCESS]: Successfully notify service `custom_test` status change to `email`.
+```
+
 ##### Web UI Simple Response
 
 ![response](https://raw.githubusercontent.com/blueskan/gopheart/master/static/response.png)
