@@ -9,7 +9,7 @@ import (
 )
 
 func ComposeMessage(template string, statistics provider.Statistics) string {
-	latestAuditLog := statistics.AuditLogs[1]
+	latestAuditLog := statistics.AuditLogs[0]
 
 	output := template
 

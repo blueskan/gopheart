@@ -5,6 +5,10 @@ also have 2 notification options for now.
 
 ### Pulse Concepts
 
+##### Web UI Simple Response
+
+![response](https://raw.githubusercontent.com/blueskan/gopheart/master/static/response.png)
+
 ##### Configuration
 There are 2 configuration method for Pulse.
 

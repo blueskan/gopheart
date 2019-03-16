@@ -31,7 +31,7 @@ health_checks:
   custom_test:
     type: custom
     source: python ./custom/ping.py
-    check_interval: 30s
+    check_interval: 10s
     retry_policy:
       timeout: 3s
       down_threshold: 3
