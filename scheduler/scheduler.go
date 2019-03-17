@@ -2,11 +2,12 @@ package scheduler
 
 import (
 	"fmt"
-	"github.com/blueskan/gopheart/log"
-	"github.com/hako/durafmt"
 	"io/ioutil"
 	"sync"
 	"time"
+
+	"github.com/blueskan/gopheart/log"
+	"github.com/hako/durafmt"
 
 	"github.com/blueskan/gopheart/config"
 	"github.com/blueskan/gopheart/notifier"
@@ -15,10 +16,10 @@ import (
 )
 
 type scheduler struct {
-	providers   []p.Provider
-	notifiers   map[string][]notifier.Notifier
-	statistics  map[string]*p.Statistics
-	persistence bool
+	providers       []p.Provider
+	notifiers       map[string][]notifier.Notifier
+	statistics      map[string]*p.Statistics
+	persistence     bool
 	persistenceLock sync.Mutex
 }
 
@@ -44,15 +45,23 @@ func NewScheduler(
 		name := provider.GetName()
 
 		if _, exists := scheduler.statistics[name]; !exists {
+			initialAuditLogs := make([]p.AuditLog, 0)
+
+			initialAuditLogs = append(initialAuditLogs, p.AuditLog{
+				Timestamp:     time.Now(),
+				PreviousState: p.Unknown,
+				NewState:      p.Unknown,
+			})
+
 			scheduler.statistics[name] = &p.Statistics{
-				ServiceName:         name,
-				CurrentFailureCount: 0,
-				CurrentSuccessCount: 0,
+				ServiceName:           name,
+				CurrentFailureCount:   0,
+				CurrentSuccessCount:   0,
 				CurrentErrorThreshold: 0,
-				RunningInterval:     provider.GetInterval(),
-				NextRunAt:           time.Now().Add(provider.GetInterval()),
-				State:               p.Unknown,
-				AuditLogs:           make([]p.AuditLog, 0),
+				RunningInterval:       provider.GetInterval(),
+				NextRunAt:             time.Now().Add(provider.GetInterval()),
+				State:                 p.Unknown,
+				AuditLogs:             initialAuditLogs,
 			}
 		}
 	}
@@ -176,7 +185,7 @@ func (s *scheduler) persistStats() {
 	}
 
 	log.Success(fmt.Sprintf("Persistence operating completed successfully"))
-	
+
 	s.persistenceLock.Unlock()
 }
 
@@ -198,6 +207,13 @@ func (s *scheduler) notify(name string, statistics *p.Statistics, isStateChanged
 	go func() {
 		// TODO fix this wrong usage, we dont need to access first element though
 		threshold := s.notifiers[name][0].GetThreshold()
+
+		latestAuditLog := statistics.AuditLogs[0]
+
+		// Notifying rules
+		if latestAuditLog.PreviousState == p.Unknown && latestAuditLog.NewState == p.Healthy {
+			return
+		}
 
 		if !isStateChanged && statistics.State == p.Healthy {
 			return

@@ -1,15 +1,16 @@
 package notifier
 
 import (
-	"github.com/hako/durafmt"
 	"strings"
 	"time"
+
+	"github.com/hako/durafmt"
 
 	"github.com/blueskan/gopheart/provider"
 )
 
 func ComposeMessage(template string, statistics provider.Statistics) string {
-	latestAuditLog := statistics.AuditLogs[0]
+	latestAuditLog := statistics.AuditLogs[1]
 
 	output := template
 

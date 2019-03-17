@@ -11,9 +11,17 @@ var ConfigPath = "./config.yaml"
 var DbPath = "./gopheart.db"
 
 type NotifierService struct {
-	Url     string `yaml:"url" json:"url"`
-	Message string `yaml:"message" json:"message"`
-	Extra   string `yaml:"extra" json:"extra"`
+	SMTPHost       string   `yaml:"smtp_host" json:"smtp_host"`
+	SMTPPort       string   `yaml:"smtp_port" json:"smtp_port"`
+	SMTPUsername   string   `yaml:"smtp_username" json:"smtp_username"`
+	SMTPPassword   string   `yaml:"smtp_password" json:"smtp_password"`
+	MailFrom       string   `yaml:"mail_from" json:"mail_from"`
+	MailTitle      string   `yaml:"mail_title" json:"mail_title"`
+	MailRecipients []string `yaml:"mail_recipients" json:"mail_recipients"`
+	SlackURL       string   `yaml:"slack_url" json:"slack_url"`
+	SlackChannel   string   `yaml:"slack_channel" json:"slack_channel"`
+	SlackUsername  string   `yaml:"slack_username" json:"slack_username"`
+	Message        string   `yaml:"message" json:"message"`
 }
 
 type Notifiers struct {
@@ -82,16 +90,45 @@ func (c *Config) FromYaml(path string) {
 func (c *Config) overrideOmitValuesWithDefaults() {
 	for key, value := range c.HealthChecks {
 		for serviceName, service := range value.Notifiers.Services {
-			if len(service.Url) <= 0 {
-				service.Url = c.Global.Notifiers.Services[serviceName].Url
+			// TODO: this replace operations should be automatically
+			if len(service.SMTPHost) <= 0 {
+				service.SMTPHost = c.Global.Notifiers.Services[serviceName].SMTPHost
+			}
+
+			if len(service.SMTPPort) <= 0 {
+				service.SMTPPort = c.Global.Notifiers.Services[serviceName].SMTPPort
+			}
+
+			if len(service.SMTPUsername) <= 0 {
+				service.SMTPUsername = c.Global.Notifiers.Services[serviceName].SMTPUsername
+			}
+
+			if len(service.SMTPPassword) <= 0 {
+				service.SMTPPassword = c.Global.Notifiers.Services[serviceName].SMTPPassword
+			}
+
+			if len(service.MailFrom) <= 0 {
+				service.MailFrom = c.Global.Notifiers.Services[serviceName].MailFrom
+			}
+
+			if len(service.MailTitle) <= 0 {
+				service.MailTitle = c.Global.Notifiers.Services[serviceName].MailTitle
+			}
+
+			if len(service.SlackURL) <= 0 {
+				service.SlackURL = c.Global.Notifiers.Services[serviceName].SlackURL
+			}
+
+			if len(service.SlackChannel) <= 0 {
+				service.SlackChannel = c.Global.Notifiers.Services[serviceName].SlackChannel
+			}
+
+			if len(service.SlackUsername) <= 0 {
+				service.SlackUsername = c.Global.Notifiers.Services[serviceName].SlackUsername
 			}
 
 			if len(service.Message) <= 0 {
 				service.Message = c.Global.Notifiers.Services[serviceName].Message
-			}
-
-			if len(service.Extra) <= 0 {
-				service.Extra = c.Global.Notifiers.Services[serviceName].Extra
 			}
 
 			c.HealthChecks[key].Notifiers.Services[serviceName] = service

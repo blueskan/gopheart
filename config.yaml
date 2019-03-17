@@ -14,11 +14,20 @@ global:
     threshold: 30
     services:
       slack:
-        url: "https://hooks.slack.com/services/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"
+        slack_url: "https://hooks.slack.com/services/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"
+        slack_channel: "#general"
+        slack_username: "P.U.L.S.E."
         message: "Service `${service_name}` has been down since `${duration}`."
-        extra: "channel:#general,username:Gopheart"
       email:
-        url: "smtp://test:test@email.test.com:1025"
+        smtp_host: "localhost"
+        smtp_port: 1025
+        smtp_username: "test"
+        smtp_password: "test"
+        mail_from: "alert@pulse.com"
+        mail_title: "Down Alert"
+        mail_recipients:
+          - me@batikansenemoglu.com
+          - batikansenemoglu@gmail.com
         message: "Service `${service_name}` has been down since `${duration}`."
   retry_policy:
     timeout: 3s
@@ -40,8 +49,18 @@ health_checks:
       threshold: 15
       services:
         slack:
-          message: "Hey its custom message i cant access google.com :("
-        email:
-          url: "smtp://test:test@localhost:1025"
+          slack_url: "https://hooks.slack.com/services/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"
+          slack_channel: "#general"
+          slack_username: "P.U.L.S.E."
           message: "Service `${service_name}` has been down since `${duration}`."
-          extra: "from:alert@pulse.com,title:Down Alert - Pulse,recipients:down@pulse.com|incident@pulse.com|sysadmin@pulse.com"
+        email:
+          smtp_host: "localhost"
+          smtp_port: 1025
+          smtp_username: "test"
+          smtp_password: "test"
+          mail_from: "alert@pulse.com"
+          mail_title: "Down Alert"
+          mail_recipients:
+            - me@batikansenemoglu.com
+            - batikansenemoglu@gmail.com
+          message: "Service `${service_name}` has been down since `${duration}`."

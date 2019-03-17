@@ -1,7 +1,7 @@
 import os
 import sys
 
-hostname = "batikansenemoglu.com"
+hostname = "bfabfbabfabfbabfabfa.com"
 response = os.system("ping -c 1 " + hostname)
 
 if response == 0:
